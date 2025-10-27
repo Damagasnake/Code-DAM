@@ -16,7 +16,6 @@ public class ex02dom {
         System.out.println(cont);
         cont = 0;
         i = 2;
-
         sc.close();
     }
 }
