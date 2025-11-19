@@ -1,5 +1,4 @@
 package com.dam.actividades;
-
 import java.util.Scanner;
 
 public class arraysDamaga {
