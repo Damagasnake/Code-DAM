@@ -46,4 +46,11 @@ public class Estacionexe {
         }
         System.out.println(sb.toString());
     }
+    private static void isopen(Estacion[] estaciones) {
+        for (int i = 0; i < estaciones.length; i++) {
+            if (estaciones[i].getEstado().equals("Abierto")) {
+                System.out.println(estaciones[i].getNombre());
+            }
+        }
+    }
 }
