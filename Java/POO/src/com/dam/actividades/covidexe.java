@@ -60,7 +60,7 @@ public class covidexe {
         }
         return grav;
     }
-private static covid mayorConMenorGravedad(covid[] pacientes){
+    private static covid mayorConMenorGravedad(covid[] pacientes){
         covid resultado = null;
         
         for(int i = 0; i < pacientes.length; i++){
