@@ -49,22 +49,22 @@ public class Estacion {
         double k1 = Double.parseDouble(kmmod[0]);
         return k1;
     }
-    private String getNombre(){
+    public String getNombre(){
         return nombre;
     }
-    private String getProvincia(){
+    public String getProvincia(){
         return provincia;
     }
-    private String getEstado(){
+    public String getEstado(){
         return estado;
     }
-    private String getRemontes(){
+    public String getRemontes(){
         return remontes;
     }
-    private String getPistas(){
+    public String getPistas(){
         return pistas;
     }
-    private String getKm(){
+    public String getKm(){
         return km;
     }
 }
