@@ -23,34 +23,43 @@ public class Estacionexe {
             String Provincia = sc.nextLine();
             System.out.println("Introduce el estado de la estacion (Abierto/cerrado)");
             String Estado = sc.nextLine();
-            System.out.println("Introduce las pistas de la estacion");
-            String Pistas = sc.nextLine();
-            System.out.println("Introduce los km de tu estacion");
-            String Km = sc.nextLine();
-            System.out.println("Introduce los remontes de tu estacion");
-            String remontes = sc.nextLine();
+
+            String Pistas = "0";
+            String Km = "0/1";
+            String remontes = "0";
+
+            if (Estado.equalsIgnoreCase("Abierto")) {
+                System.out.println("Introduce las pistas de la estacion");
+                Pistas = sc.nextLine();
+                System.out.println("Introduce los km de tu estacion");
+                Km = sc.nextLine();
+                System.out.println("Introduce los remontes de tu estacion");
+                remontes = sc.nextLine();
+            }
+
             Estaciones[i] = new Estacion(Nombre, Provincia, Estado, Pistas, remontes, Km);
         }
         return Estaciones;
     }
 
+    private static boolean isopen(Estacion estacion) {
+        return estacion.getEstado().equalsIgnoreCase("Abierto");
+    }
+
     private static void showinfo(Estacion[] estaciones) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < estaciones.length; i++) {
-            sb.append(estaciones[i].toString());
-            sb.append("\nPorcentaje KM esquiables: ");
-            sb.append(estaciones[i].kmesq());
-            sb.append("%\n\n");
-            sb.append(estaciones[i].kmab());
-            sb.append("%\n\n");
-        }
-        System.out.println(sb.toString());
-    }
-    private static void isopen(Estacion[] estaciones) {
-        for (int i = 0; i < estaciones.length; i++) {
-            if (estaciones[i].getEstado().equals("Abierto")) {
-                System.out.println(estaciones[i].getNombre());
+            if (isopen(estaciones[i])) {
+                sb.append(estaciones[i].toString());
+                sb.append("\nPorcentaje KM esquiables: ");
+                sb.append(estaciones[i].kmesq());
+                sb.append("%\n\n");
+                sb.append(estaciones[i].kmab());
+                sb.append("%\n\n");
+            } else {
+                sb.append(estaciones[i].toString());
             }
         }
+        System.out.println(sb.toString());
     }
 }
