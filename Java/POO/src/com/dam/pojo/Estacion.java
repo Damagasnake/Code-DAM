@@ -37,6 +37,7 @@ public class Estacion {
         sb.append(km);
         return sb.toString();
     }
+    
     public double kmesq(){
         String [] kmmod = km.split("/");
         double k1 = Double.parseDouble(kmmod[0]);
