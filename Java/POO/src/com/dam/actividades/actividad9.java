@@ -10,7 +10,7 @@ public class actividad9 {
         sc.close();
     }
 
-    public static int NumInv(int numPrimario){
+    public static int NumInv(int numPrimario) {
         int numInverso = 0;
         int res = 0;
         int digits = 0;
@@ -19,11 +19,11 @@ public class actividad9 {
             digits++;
         }
         while (digits > 0) {
-            numInverso =  (numPrimario % 10) * (digits * 10);
-            digits--;    
+            numInverso = (numPrimario % 10) * (digits * 10);
+            digits--;
         }
-        numInverso =  (numPrimario % 10) * (digits * 10);
-        numInverso = 
+        numInverso = (numPrimario % 10) * (digits * 10);
+
         return numInverso;
     }
 }
