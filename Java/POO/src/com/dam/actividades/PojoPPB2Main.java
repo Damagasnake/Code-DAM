@@ -36,11 +36,11 @@ public class PojoPPB2Main {
                         valido = true;
                         break; // no se cortar el bucle sin el break pero aqui ha comprobado que mi String sea
                                // uno valido con el foreach
+                               // se me ocurrio hacer split pero estoy en el hospital :)
                     }
                 }
             }
 
-            // Validación de distancia
             System.out.println("Introduce la distancia recorrida");
             Double distancia = 0.0;
             boolean distVal = false;
@@ -60,7 +60,6 @@ public class PojoPPB2Main {
                 }
             }
 
-            // Validación de tiempo
             Double tiempo = 0.0;
             boolean validData = false;
             while (!validData) {
