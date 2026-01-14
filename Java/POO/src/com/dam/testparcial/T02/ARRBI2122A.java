@@ -6,6 +6,7 @@ public class ARRBI2122A {
         sc = new Scanner(System.in);
         int[][] ArrayB = CrearArray();
         fillArrayB(ArrayB);
+        sumaDiag(ArrayB);
     }
     public static int[][] CrearArray(){
         System.out.println("Introduce el valor n (columnas)");
@@ -35,6 +36,17 @@ public class ARRBI2122A {
                     sumaInf = sumaInf += arrayB[i][j];
                 }
             }
+        }
+        System.out.println(sumaInf);
+        System.out.println(sumaSup);
+        if (sumaInf %2 == 0 && sumaSup % 2 == 0) {
+            System.out.println("Las 2 son pares");
+        }else if(sumaInf %2 == 0){
+            System.out.println("la suma inferior es par");
+        }else if(sumaSup % 2 == 0){
+            System.out.println("la suma superior es par");
+        }else{
+            System.out.println("Ninguna es par");
         }
     }
 }

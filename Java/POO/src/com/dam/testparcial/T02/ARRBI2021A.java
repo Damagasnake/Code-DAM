@@ -17,6 +17,7 @@ public class ARRBI2021A {
         int[][] arrayA = new int[n][m];
         fillArr(arrayA);
         printARR(arrayA);
+        sumRow(arrayA, m);
     }
 
     public static void fillArr(int[][] array) {
@@ -50,7 +51,7 @@ public class ARRBI2021A {
                 System.out.println("fila " + i + " da " + suma);
             }
         }
-        
+
         //cols
 
         for (int l = 0; l < array[0].length; l++) {
