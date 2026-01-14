@@ -1,4 +1,4 @@
-package com.dam.actividades.exeptions;
+package com.dam.exceptions;
 
 public class exceptionTest00 {
     public static void main(String[] args) {
