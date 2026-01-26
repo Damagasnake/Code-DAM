@@ -1,10 +1,11 @@
 package com.dam.actividades;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
+
 public class Productomain {
     public static void main(String[] args) {
-        ArrayList<Producto> listaCompra = new ArrayList<>();
+        HashSet<Producto> listaCompra = new HashSet<>();
         Scanner sc = new Scanner(System.in);
         int result = Accion(sc);
 
@@ -46,7 +47,7 @@ public class Productomain {
         return result;
     }
 
-    private static void AddProducto(ArrayList<Producto> p, Scanner sc) {
+    private static void AddProducto(HashSet<Producto> p, Scanner sc) {
         System.out.println("Introduce un nombre de producto");
         String n = sc.nextLine();
         System.out.println("Introduce  la cantidad de los productos");
@@ -70,16 +71,21 @@ public class Productomain {
         return nombre;
     }
 
-    private static void mostrarLista(ArrayList<Producto> listaCompra) {
+    private static void mostrarLista(HashSet<Producto> listaCompra) {
         System.out.println("\n Lista de la compra");
-        for (int i = 0; i < listaCompra.size(); i++) {
-            System.out.println(listaCompra);
+        for (Producto producto : listaCompra) {
+            System.out.println(producto);
         }
     }
 
-    private static void borrarProd(ArrayList<Producto> listaCompra, Scanner sc) {
+    private static void borrarProd(HashSet<Producto> listaCompra, Scanner sc) {
         String nombre = solNombre(sc);
-        //int cantidad = solCant(sc);
+        Producto productoABorrar = new Producto(nombre, 0);
 
+        if (listaCompra.remove(productoABorrar)) {
+            System.out.println("Producto '" + nombre + "' eliminado correctamente.");
+        } else {
+            System.out.println("Producto '" + nombre + "' no encontrado en la lista.");
+        }
     }
 }
