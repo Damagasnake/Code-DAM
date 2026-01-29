@@ -15,5 +15,8 @@ public class Cancion {
         return "Song [Titulo=" + Titulo + ", Duracion=" + Duracion + ", Artista=" + Artista
                 + "]";
     }
-    
+
+    public int getDuracion() {
+        return Duracion;
+    }
 }

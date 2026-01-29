@@ -47,7 +47,7 @@ public class Tetris {
     public static void op02(HashMap<String, Integer> TablaTT) {
         TreeMap<String,Integer> sort = new TreeMap<>(TablaTT);
         for (Entry<String,Integer> iterar : sort.entrySet()) {
-            System.out.println( iterar.getKey() + "-> " + iterar.getValue());
+            System.out.println(iterar.getKey() + "-> " + iterar.getValue());
         }
     }
 }

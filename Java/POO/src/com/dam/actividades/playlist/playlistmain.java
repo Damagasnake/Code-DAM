@@ -23,6 +23,7 @@ public class playlistmain {
         String artista = sc.nextLine();
         System.out.println("Introduce la duracion en segundos de la cancion");
         int duracion = Integer.parseInt(sc.nextLine());
-    }
 
+
+    }
 }
