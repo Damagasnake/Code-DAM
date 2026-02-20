@@ -95,6 +95,7 @@ public class NoticiaMain {
                 }
             }
         }
+        sc.close();
     }
 
     public static void mostrarNoticias(List<Noticia> noticiaList) {
