@@ -1,4 +1,5 @@
 package com.dam.actividades;
+
 import java.util.Scanner;
 
 public class arraysDamaga {
@@ -35,5 +36,11 @@ public class arraysDamaga {
         System.out.println("Cantidad de positivos " + contpos);
         System.out.println("Cantidad de negativos " + contneg);
         System.out.println("Cantidad de ceros " + ceros);
+    }
+
+    private static void printArr(int[] valores) {
+        for (int i = 0; i < valores.length; i++) {
+            System.out.println(valores[i]);
+        }
     }
 }
