@@ -14,9 +14,11 @@ public class App {
       conexion.close();
       System.out.println("Conexion cerrada");
     }catch (ClassNotFoundException e){
-      System.out.println("Error al conectar driver");
+      System.out.println("Error al conectar driver: " + e.getMessage());
+      e.printStackTrace();
     }catch (SQLException e){
-      System.out.println("Error al conectar url");
+      System.out.println("Error al conectar url: " + e.getMessage());
+      e.printStackTrace();
     }
   }
 }
