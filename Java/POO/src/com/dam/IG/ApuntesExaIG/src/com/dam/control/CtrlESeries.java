@@ -25,6 +25,7 @@ public class CtrlESeries implements ActionListener{
 		this.op1=op1;
 		this.op2=op2;
 	}
+	// El controlador recibe todos los archivos del programa
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
