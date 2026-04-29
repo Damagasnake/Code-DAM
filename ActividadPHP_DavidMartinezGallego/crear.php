@@ -19,8 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // chequea si se ha cargado la pági
 
     $query = "INSERT INTO productos (nombre, descripcion, precio, imagen) VALUES ('$nombre', '$descripcion', '$precio', '$imagen')"; //query preparada para insertar otro producto
     //$query = "INSERT INTO productos(nombre, descripcion, precio, imagen) values (?,?,?,?)";
-    //$stmt = $conexion->prepare($query);
+    //$stmt = $conexiobn->prepare($query);
     //$stmt->bind_param("ssds", $nombre, $descripcion, $precio, $imagen);
+    // $stmt->execute;
     if ($conexion->query($query) === TRUE) {
         echo "Producto guardado correctamente";
     } else {
