@@ -2,7 +2,6 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.HeadlessException;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
@@ -17,7 +16,7 @@ import control.ConsultaResController;
 
 // VIEW — Ventana principal. Extiende JFrame (ES una ventana de escritorio).
 // Implementa IVPrincipalEncuestas → el controlador puede tratarla como interfaz.
-public class VPrincipalEncuestas extends JFrame implements IVPrincipalEncuestas {
+public class VPrincipalRes extends JFrame implements IVPrincipalRestaurantes {
 
     // Tamaño fijo de la ventana (layout null requiere tamaño fijo).
     public static final int ANCHO = 600;
@@ -39,7 +38,7 @@ public class VPrincipalEncuestas extends JFrame implements IVPrincipalEncuestas 
     private JMenuItem mntmRealizar;
     private JMenuItem mntmVisualizar;
 
-    public VPrincipalEncuestas() {
+    public void VPrincipal() {
         configurarVentana();   // título, tamaño, posición, menú
         crearComponentes();    // JScrollPane central
     }
@@ -103,9 +102,9 @@ public class VPrincipalEncuestas extends JFrame implements IVPrincipalEncuestas 
     // El controlador sabrá qué ítem disparó el evento comparando con getMntmRealizar()
     // y getMntmVisualizar() mediante e.getSource().
     @Override
-    public void setControlador(ControladorEncuestas ce) {
-        mntmRealizar.addActionListener(ce);
-        mntmVisualizar.addActionListener(ce);
+    public void setControlador(ConsultaResController consultaResController) {
+        mntmRealizar.addActionListener(consultaResController);
+        mntmVisualizar.addActionListener(consultaResController);
     }
 
     @Override
