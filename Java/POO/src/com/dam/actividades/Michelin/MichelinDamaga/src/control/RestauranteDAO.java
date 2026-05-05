@@ -25,9 +25,7 @@ public class RestauranteDAO {
         String sql = "SELECT DISTINCT REGION FROM RESTAURANTES WHERE REGION IS NOT NULL AND TRIM(REGION) <> '' ORDER BY REGION";
         ArrayList<String> regiones = new ArrayList<>();
 
-        try (Connection connection = accesoDBprop.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
+        try (Connection connection = accesoDBprop.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
 
             while (resultSet.next()) {
                 regiones.add(resultSet.getString("REGION"));
@@ -38,10 +36,7 @@ public class RestauranteDAO {
     }
 
     public List<Restaurantes> buscarRestaurantes(String region, Integer distincion) throws SQLException {
-        StringBuilder sql = new StringBuilder(
-                "SELECT ID, NOMBRE, REGION, CIUDAD, DISTINCION, DIRECCION, PRECIO_MIN, PRECIO_MAX, COCINA, TELEFONO, WEB " +
-                "FROM RESTAURANTES WHERE 1 = 1"
-        );
+        StringBuilder sql = new StringBuilder("SELECT ID, NOMBRE, REGION, CIUDAD, DISTINCION, DIRECCION, PRECIO_MIN, PRECIO_MAX, COCINA, TELEFONO, WEB " + "FROM RESTAURANTES WHERE 1 = 1");
         List<Object> parametros = new ArrayList<>();
 
         if (region != null && !region.isBlank()) {
@@ -59,8 +54,7 @@ public class RestauranteDAO {
 
         List<Restaurantes> restaurantes = new ArrayList<>();
 
-        try (Connection connection = accesoDBprop.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+        try (Connection connection = accesoDBprop.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
 
             for (int i = 0; i < parametros.size(); i++) {
                 preparedStatement.setObject(i + 1, parametros.get(i));
@@ -79,8 +73,7 @@ public class RestauranteDAO {
     public boolean eliminarPorId(int id) throws SQLException {
         String sql = "DELETE FROM RESTAURANTES WHERE ID = ?";
 
-        try (Connection connection = accesoDBprop.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (Connection connection = accesoDBprop.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate() > 0;
         }
