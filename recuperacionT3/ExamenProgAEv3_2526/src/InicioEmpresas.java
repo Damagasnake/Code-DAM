@@ -10,21 +10,21 @@ public class InicioEmpresas {
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
 			VPEmpresas vp = new VPEmpresas();
-			PRegistrarEmpresa pre = new PRegistrarEmpresa();
-			PConsultaEmpresas pce = new PConsultaEmpresas();
-			PModificarEmpresa pme = new PModificarEmpresa();
+			PRegistrarEmpresa pre = new PRegistrarEmpresa(); // Panel Registrar
+			PConsultaEmpresas pce = new PConsultaEmpresas(); // Panel Consulta
+			PModificarEmpresa pme = new PModificarEmpresa(); // Panel Modificar
 
-			ControladorEmpresas ce = new ControladorEmpresas(vp);
-			ce.setPre(pre);
-			ce.setPce(pce);
-			ce.setPme(pme);
+			ControladorEmpresas ce = new ControladorEmpresas(vp); // Controlador
+			ce.setPre(pre); // Panel Registrar
+			ce.setPce(pce); // Panel Consulta
+			ce.setPme(pme); // Panel Modificar
 
 			vp.setControlador(ce);
-			pre.setControlador(ce);
-			pce.setControlador(ce);
-			pme.setControlador(ce);
+			pre.setControlador(ce); // Panel Registrar
+			pce.setControlador(ce); // Panel Consulta
+			pme.setControlador(ce); // Panel Modificar
 
-			vp.hacerVisible();
+			vp.hacerVisible(); // Mostrar la ventana
 		});
 	}
 

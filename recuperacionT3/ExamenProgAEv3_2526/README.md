@@ -30,6 +30,7 @@ El foco está en lo que más cuesta: **conectar ventanas, tablas, DAO y controla
 20. [Checklist de examen](#20-checklist-de-examen)
 21. [Errores frecuentes con solución](#21-errores-frecuentes-con-solución)
 22. [Cómo ejecutar el proyecto](#22-cómo-ejecutar-el-proyecto)
+23. [Swing: qué usa este ejercicio y qué no (con impacto en el DAO)](#23-swing-qué-usa-este-ejercicio-y-qué-no)
 
 ---
 
@@ -1979,6 +1980,416 @@ java -cp "bin:lib/sqlite-jdbc-3.51.3.0.jar" InicioEmpresas
 2. Run As → Java Application
 
 El directorio de trabajo en Eclipse es automáticamente la raíz del proyecto, así que `DB/ConfiguracionDB.properties` y `BBDD/BBDD.db` se encuentran sin problemas.
+
+---
+
+## 23. Swing: qué usa este ejercicio y qué no
+
+Este proyecto **no necesita** más componentes Swing de los que ya tiene para funcionar. Pero en otros exámenes del DAM suelen aparecer elementos que aquí no se practican. Esta sección es **solo documentación**: los ejemplos son independientes y **no forman parte del código del ejercicio**.
+
+### Lo que sí usa este proyecto
+
+| Área | Elementos |
+|------|-----------|
+| Ventana | `JFrame`, `JMenuBar`, `JMenu`, `JMenuItem` |
+| Contenedores | `JPanel`, `JScrollPane` |
+| Entrada | `JTextField`, `JCheckBox`, `JSpinner` |
+| Acción | `JButton`, `JLabel` |
+| Datos | `JTable`, `DefaultTableModel`, `ListSelectionModel` |
+| Diálogos | `JOptionPane` |
+| Eventos | Solo `ActionListener` |
+| Layout | `BorderLayout` (ventana) + `setLayout(null)` + `setBounds` (paneles) |
+| Arranque | `SwingUtilities.invokeLater` |
+
+### Lo más habitual en otros exámenes y ausente aquí
+
+| Elemento | Por qué importa | Qué usa este ejercicio en su lugar |
+|----------|-----------------|-----------------------------------|
+| `JComboBox` | Filtros y listas desplegables | `JTextField` en consulta; `JCheckBox` para convenio |
+| `JRadioButton` + `ButtonGroup` | Opciones excluyentes | `JCheckBox` (SI/NO) |
+| `CardLayout` | Cambiar paneles con `show()` | `JScrollPane.setViewportView()` en `cargarPanel()` |
+| `ListSelectionListener` | Habilitar botones al seleccionar fila | Botones visibles/habilitados al buscar |
+| Otros layouts | `FlowLayout`, `GridLayout`, `GridBagLayout`… | Solo `BorderLayout` y posicionamiento absoluto |
+| Otros listeners | `MouseListener`, `KeyListener`, `ItemListener`… | Solo `ActionListener` |
+
+---
+
+### Ejemplo 1: `JComboBox` como filtro de convenio
+
+En exámenes como el de Michelin, los filtros suelen ser desplegables. Aquí el convenio es un `JCheckBox`, pero en otro enunciado podría pedirse esto:
+
+```java
+import javax.swing.*;
+
+public class EjemploComboBox extends JPanel {
+
+    private JComboBox<String> cmbConvenio;
+
+    public EjemploComboBox() {
+        setLayout(null);
+
+        JLabel lbl = new JLabel("Convenio:");
+        lbl.setBounds(30, 30, 80, 24);
+        add(lbl);
+
+        // Opciones fijas del desplegable
+        cmbConvenio = new JComboBox<>(new String[] { "Todos", "Firmado", "Pendiente" });
+        cmbConvenio.setBounds(120, 28, 150, 24);
+        add(cmbConvenio);
+    }
+
+    // Getter para el controlador (misma idea que getCifFiltro())
+    public String getConvenioFiltro() {
+        Object seleccion = cmbConvenio.getSelectedItem();
+        if (seleccion == null || "Todos".equals(seleccion)) {
+            return "";          // sin filtro → el DAO devuelve todo
+        }
+        if ("Firmado".equals(seleccion)) {
+            return "SI";
+        }
+        return "NO";
+    }
+
+    public JComboBox<String> getCmbConvenio() {
+        return cmbConvenio;
+    }
+}
+```
+
+**En el controlador**, leerías el filtro igual que `getCifFiltro()`:
+
+```java
+String cif      = pce.getCifFiltro();
+String razon    = pce.getRazonFiltro();
+String convenio = pce.getConvenioFiltro();   // "SI", "NO" o "" si eligió "Todos"
+ArrayList<Empresa> lista = datosEmpresas.buscarEmpresas(cif, razon, convenio);
+```
+
+#### Impacto en el DAO: **sí cambia** (solo la búsqueda)
+
+Hoy `buscarEmpresas(String cif, String razon)` no filtra por convenio. Habría que ampliar la firma y añadir otra condición al `WHERE`:
+
+```java
+public ArrayList<Empresa> buscarEmpresas(String cif, String razon, String convenio) {
+    ArrayList<Empresa> lista = new ArrayList<>();
+    StringBuilder query = new StringBuilder("SELECT * FROM " + EmpresaContracts.NOM_TABLA);
+    ArrayList<String> condiciones = new ArrayList<>();
+
+    if (cif != null && !cif.isEmpty()) {
+        condiciones.add(EmpresaContracts.COL_ID + " = ?");
+    }
+    if (razon != null && !razon.isEmpty()) {
+        condiciones.add(EmpresaContracts.COL_RAZON + " LIKE ?");
+    }
+    // Nuevo filtro del JComboBox
+    if (convenio != null && !convenio.isEmpty()) {
+        condiciones.add(EmpresaContracts.COL_CONVENIO + " = ?");
+    }
+
+    if (!condiciones.isEmpty()) {
+        query.append(" WHERE ").append(String.join(" AND ", condiciones));
+        // Si el enunciado pide OR entre CIF y razón pero AND con convenio:
+        // WHERE (CIF = ? OR RAZON_SOCIAL LIKE ?) AND CONVENIO = ?
+    }
+
+    // ... abrir conexión, asignar parámetros en orden, executeQuery(), mapearEmpresa() ...
+    return lista;
+}
+```
+
+`insertEmpresa` y `updateEmpresa` **no cambian**: el convenio ya se guarda con `e.getConvenio()` (`"SI"` / `"NO"`). El `JComboBox` solo afecta al **SELECT** de consulta.
+
+---
+
+### Ejemplo 2: `JRadioButton` + `ButtonGroup` (opciones excluyentes)
+
+Si el enunciado pide elegir **un solo** rango o tipo entre varios, no sirve un `JCheckBox` por opción: hace falta un `ButtonGroup`:
+
+```java
+import javax.swing.*;
+import java.awt.event.ActionListener;
+
+public class EjemploRadioButtons extends JPanel {
+
+    private ButtonGroup grpTamano;
+    private JRadioButton rdbPequena;
+    private JRadioButton rdbMediana;
+    private JRadioButton rdbGrande;
+
+    public EjemploRadioButtons() {
+        setLayout(null);
+
+        grpTamano = new ButtonGroup();
+
+        rdbPequena  = new JRadioButton("Pequeña (<50 emp.)",  true);  // seleccionada por defecto
+        rdbMediana  = new JRadioButton("Mediana (50-250 emp.)");
+        rdbGrande   = new JRadioButton("Grande (>250 emp.)");
+
+        rdbPequena.setBounds(30, 30, 200, 24);
+        rdbMediana.setBounds(30, 60, 200, 24);
+        rdbGrande.setBounds(30, 90, 200, 24);
+
+        // El ButtonGroup garantiza que solo uno esté marcado
+        grpTamano.add(rdbPequena);
+        grpTamano.add(rdbMediana);
+        grpTamano.add(rdbGrande);
+
+        add(rdbPequena);
+        add(rdbMediana);
+        add(rdbGrande);
+    }
+
+    public void setControlador(ActionListener control) {
+        rdbPequena.addActionListener(control);
+        rdbMediana.addActionListener(control);
+        rdbGrande.addActionListener(control);
+    }
+
+    public String getTamanoSeleccionado() {
+        if (rdbPequena.isSelected())  return "PEQUENA";
+        if (rdbMediana.isSelected())  return "MEDIANA";
+        return "GRANDE";
+    }
+}
+```
+
+#### Impacto en el DAO: **sí cambia** (filtro por rango numérico)
+
+Los radios devuelven `"PEQUENA"`, `"MEDIANA"`, `"GRANDE"`. Eso **no es una columna** de la tabla: hay que traducirlo a condiciones sobre `NUM_EMPLEADOS`:
+
+| Radio seleccionado | Condición SQL |
+|--------------------|---------------|
+| Pequeña | `NUM_EMPLEADOS < 50` |
+| Mediana | `NUM_EMPLEADOS BETWEEN 50 AND 250` |
+| Grande | `NUM_EMPLEADOS > 250` |
+
+**En el controlador:**
+
+```java
+String tamano = panel.getTamanoSeleccionado();
+ArrayList<Empresa> lista = datosEmpresas.buscarEmpresas(cif, razon, tamano);
+```
+
+**En el DAO** (dentro de `buscarEmpresas` o en un método aparte):
+
+```java
+if ("PEQUENA".equals(tamano)) {
+    condiciones.add(EmpresaContracts.COL_NUM_EMP + " < 50");
+} else if ("MEDIANA".equals(tamano)) {
+    condiciones.add(EmpresaContracts.COL_NUM_EMP + " BETWEEN 50 AND 250");
+} else if ("GRANDE".equals(tamano)) {
+    condiciones.add(EmpresaContracts.COL_NUM_EMP + " > 250");
+}
+// Si no hay filtro de tamaño → no añades condición
+```
+
+Estas condiciones **no llevan `?`** porque el rango lo defines tú en el código, no lo introduce el usuario. `insertEmpresa` y `updateEmpresa` **no cambian**: el número de empleados ya va en el `JSpinner` y en `e.getNumEmpleados()`.
+
+---
+
+### Ejemplo 3: `ListSelectionListener` en la tabla
+
+En este ejercicio, **Modificar** y **Eliminar** se habilitan al mostrar resultados. Otro enunciado puede exigir que solo se activen **cuando el usuario selecciona una fila**:
+
+```java
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
+public class EjemploSeleccionTabla extends JPanel {
+
+    private JTable tblEmpresas;
+    private DefaultTableModel dtm;
+    private JButton btnModificar;
+    private JButton btnEliminar;
+
+    public EjemploSeleccionTabla() {
+        setLayout(null);
+
+        dtm = new DefaultTableModel(new Object[] { "CIF", "Razón social" }, 0);
+        tblEmpresas = new JTable(dtm);
+        tblEmpresas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JScrollPane scroll = new JScrollPane(tblEmpresas);
+        scroll.setBounds(30, 30, 400, 150);
+        add(scroll);
+
+        btnModificar = new JButton("Modificar");
+        btnModificar.setBounds(30, 200, 120, 24);
+        btnModificar.setEnabled(false);   // deshabilitados hasta seleccionar fila
+        add(btnModificar);
+
+        btnEliminar = new JButton("Eliminar");
+        btnEliminar.setBounds(170, 200, 120, 24);
+        btnEliminar.setEnabled(false);
+        add(btnEliminar);
+
+        // Escuchar cambios de selección en la tabla
+        tblEmpresas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                // Ignorar eventos intermedios mientras arrastra el ratón
+                if (e.getValueIsAdjusting()) {
+                    return;
+                }
+                int fila = tblEmpresas.getSelectedRow();
+                boolean hayFila = fila != -1;
+                btnModificar.setEnabled(hayFila);
+                btnEliminar.setEnabled(hayFila);
+            }
+        });
+    }
+
+    public JTable getTblEmpresas()       { return tblEmpresas; }
+    public DefaultTableModel getDtm()    { return dtm; }
+    public JButton getBtnModificar()     { return btnModificar; }
+    public JButton getBtnEliminar()      { return btnEliminar; }
+}
+```
+
+**Diferencia clave con este ejercicio:** aquí no hace falta un `else if` extra en `actionPerformed()`; la vista reacciona sola al seleccionar fila. El controlador sigue comprobando `getSelectedRow() == -1` antes de modificar o eliminar.
+
+#### Impacto en el DAO: **no cambia**
+
+Solo afecta a **cuándo** se habilitan los botones en la vista. Las llamadas al DAO siguen siendo las mismas:
+
+| Acción del usuario | Métodos DAO (sin cambios) |
+|--------------------|---------------------------|
+| Modificar | `obtenerEmpresaPorCif(cif)` → `updateEmpresa(empresa)` |
+| Eliminar | `eliminarEmpresa(cif)` |
+
+El CIF sigue leyéndose de la fila seleccionada:
+
+```java
+String cif = (String) pce.getDtmEmpresas().getValueAt(fila, 0);
+```
+
+El SQL no sabe si el botón se habilitó al buscar o al seleccionar fila.
+
+---
+
+### Ejemplo 4: `CardLayout` para cambiar paneles
+
+Este proyecto cambia paneles con `cargarPanel()` y `setViewportView()`. El patrón clásico alternativo es `CardLayout`:
+
+```java
+import javax.swing.*;
+import java.awt.*;
+
+public class EjemploCardLayout extends JFrame {
+
+    private CardLayout cardLayout;
+    private JPanel contenedor;
+    private JPanel panelConsulta;
+    private JPanel panelRegistro;
+
+    public EjemploCardLayout() {
+        setSize(500, 400);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        cardLayout = new CardLayout();
+        contenedor = new JPanel(cardLayout);
+
+        panelConsulta = new JPanel();
+        panelConsulta.add(new JLabel("Panel de consulta"));
+
+        panelRegistro = new JPanel();
+        panelRegistro.add(new JLabel("Panel de registro"));
+
+        // Cada add() necesita un nombre (String) para identificar la "carta"
+        contenedor.add(panelConsulta, "consulta");
+        contenedor.add(panelRegistro, "registro");
+
+        add(contenedor, BorderLayout.CENTER);
+
+        // Menú de ejemplo
+        JMenuItem mntmConsulta = new JMenuItem("Consultar");
+        mntmConsulta.addActionListener(e -> mostrarPanel("consulta"));
+
+        JMenuItem mntmRegistrar = new JMenuItem("Registrar");
+        mntmRegistrar.addActionListener(e -> mostrarPanel("registro"));
+
+        JMenuBar bar = new JMenuBar();
+        JMenu menu = new JMenu("Mantenimiento");
+        menu.add(mntmConsulta);
+        menu.add(mntmRegistrar);
+        bar.add(menu);
+        setJMenuBar(bar);
+    }
+
+    public void mostrarPanel(String nombre) {
+        cardLayout.show(contenedor, nombre);  // muestra la "carta" con ese nombre
+        contenedor.revalidate();
+        contenedor.repaint();
+    }
+}
+```
+
+**Equivalencia con este ejercicio:**
+
+| Este proyecto | Con `CardLayout` |
+|---------------|------------------|
+| `vp.cargarPanel(pce)` | `cardLayout.show(contenedor, "consulta")` |
+| `scrpContenedor.setViewportView(panel)` | Los paneles ya están en el contenedor desde el inicio |
+
+#### Impacto en el DAO: **no cambia**
+
+`CardLayout` es solo **navegación entre paneles**. Registrar, buscar, modificar y eliminar siguen usando los mismos cinco métodos del DAO:
+
+- `insertEmpresa`
+- `buscarEmpresas`
+- `obtenerEmpresaPorCif`
+- `updateEmpresa`
+- `eliminarEmpresa`
+
+El DAO no sabe si cambiaste de panel con `cargarPanel()` o con `cardLayout.show()`.
+
+---
+
+### Cómo influye el DAO en cada ejemplo (resumen)
+
+**Regla general:** el DAO solo cambia si el componente Swing introduce un **dato nuevo** que hay que filtrar, insertar o actualizar en la BD. Si solo cambia la interacción o la pantalla, el DAO sigue igual.
+
+```
+Vista (Swing)  →  Controlador  →  DAO  →  SQL
+     ↑                              ↓
+     └──────── Empresa / ResultSet ─┘
+```
+
+| Ejemplo | ¿Cambia el DAO? | Qué tocar |
+|---------|-----------------|-----------|
+| `JComboBox` (convenio) | **Sí** | Ampliar `buscarEmpresas` con parámetro `convenio` y `CONVENIO = ?` |
+| `JRadioButton` (tamaño) | **Sí** | Ampliar `buscarEmpresas` con condiciones sobre `NUM_EMPLEADOS` |
+| `ListSelectionListener` | **No** | Solo vista: cuándo están activos Modificar/Eliminar |
+| `CardLayout` | **No** | Solo vista: cómo se muestran los paneles |
+
+**Flujos según el tipo de componente:**
+
+```
+JComboBox / JRadioButton
+    → el controlador lee el valor del componente (getter)
+    → llama al DAO con parámetros extra
+    → el DAO construye el WHERE dinámico
+    → devuelve ArrayList<Empresa>
+    → la vista hace cargarTabla(lista)
+
+ListSelectionListener / CardLayout
+    → solo afectan a la vista (o al controlador al pulsar)
+    → las llamadas al DAO son las mismas de siempre
+```
+
+**Regla práctica para el examen:** si el componente devuelve un dato que debe **filtrar, insertar o actualizar** en la BD → toca el DAO (y a veces `Empresa` u `obtenerDatos()`). Si solo cambia cuándo se pulsa algo o qué panel se ve → el DAO no se toca.
+
+---
+
+### Qué repasar si el examen trae algo distinto
+
+1. **`JComboBox`** — `getSelectedItem()`, `getSelectedIndex()`, rellenar con `addItem()` o array en el constructor.
+2. **`JRadioButton` + `ButtonGroup`** — solo una opción marcada; leer con `isSelected()`.
+3. **`ListSelectionListener`** — habilitar acciones según la fila seleccionada en `JTable`.
+4. **`CardLayout`** — cambiar vista con `show(contenedor, "nombre")`.
+5. **Un layout distinto de `null`** — al menos saber colocar componentes con `FlowLayout` o `GridLayout`.
 
 ---
 
