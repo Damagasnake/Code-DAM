@@ -1,117 +1,168 @@
 # Code-DAM
 
-Repositorio personal de ejercicios, prácticas y material de estudio del **1º DAM** (Desarrollo de Aplicaciones Multiplataforma). Aquí concentro el código que he ido escribiendo a lo largo del curso, desde los fundamentos de Java hasta aplicaciones de escritorio con **Swing**, **patrón MVC**, **DAO** y **JDBC** con **SQLite**.
+Repositorio personal con el código y el material de estudio del **1º DAM** (David Martínez Gallego). Aquí van acumulándose ejercicios de clase, actividades por unidad formativa, pruebas parciales y proyectos más completos — desde programas de consola hasta aplicaciones Swing con base de datos.
+
+No es un único proyecto desplegable: es una colección organizada por carpetas, cada una con su propio `main` o punto de entrada.
 
 ---
 
-## Qué he aprendido
+## Contenido general
 
-### 1. Fundamentos de Java (UF4)
-
-- Tipos de datos, operadores y entrada/salida por consola.
-- Estructuras de control: `if`/`else`, `switch`, bucles `for`, `while` y `do-while`.
-- Métodos, parámetros y ámbito de variables.
-
-**Carpetas:** [`Java/UF_4/`](Java/UF_4/) · [`Java/SentenciasRep/`](Java/SentenciasRep/) · [`Java/Pruebas_UF4_1/`](Java/Pruebas_UF4_1/)
-
-### 2. Programación orientada a objetos
-
-- Clases, objetos, constructores, encapsulación (`private` + getters).
-- Herencia, polimorfismo y composición.
-- Arrays, `ArrayList`, `HashMap` y `HashSet`.
-- Manejo de excepciones (`try`/`catch`/`finally`).
-- Cadenas (`String`, `StringBuilder`) y comparación de objetos.
-
-**Carpeta principal:** [`Java/POO/`](Java/POO/)
-
-Subcarpetas destacadas:
-
-| Carpeta | Contenido |
-|---------|-----------|
-| `pojo/` | Clases de dominio (Persona, Coche, CampoFutbol…) |
-| `actividades/herencia/` | Herencia con empleados de empresa |
-| `hashmaps/` | HashMap, ordenación y colecciones |
-| `exceptions/` | Pruebas con excepciones |
-| `actividades/playlist/` | Actividad con listas y objetos |
-| `IG/` | Interfaces gráficas y apuntes de examen |
-
-### 3. Aplicaciones de escritorio — MVC + DAO + JDBC
-
-El bloque más importante para los exámenes: una aplicación Swing con arquitectura en capas.
-
-```
-Usuario → Vista (Swing) → Controlador → DAO → SQLite
-                ↑              ↓
-                └──── Empresa / ResultSet ──┘
-```
-
-| Capa | Responsabilidad | No debe hacer |
-|------|-----------------|---------------|
-| **Vista** | Componentes, validar campos, mostrar mensajes | Llamar al DAO, escribir SQL |
-| **Controlador** | Escuchar eventos, coordinar vista y DAO | Crear componentes, escribir SQL |
-| **Modelo (DAO)** | SQL, conexión JDBC, mapear `ResultSet` → objeto | Mostrar `JOptionPane`, leer `JTextField` |
-
-**Tres reglas que no se rompen en examen:**
-
-1. Cada botón activo necesita: atributo → `crearComponentes()` → `setControlador()` → getter → `else if` en el controlador.
-2. La vista **nunca** llama al DAO.
-3. El DAO **nunca** muestra mensajes al usuario.
-
-### 4. Bases de datos
-
-- SQL: `CREATE TABLE`, `INSERT`, `SELECT`, `UPDATE`, `DELETE`, filtros con `WHERE`, `LIKE`, claves primarias y restricciones.
-- JDBC: `Connection`, `PreparedStatement`, `ResultSet`, cierre en `finally`.
-- Configuración externa con `.properties` y driver SQLite.
-- MySQL procedural: procedimientos, funciones y triggers (cheatsheet en raíz).
-
-**Recursos:** [`mysql_procedural_cheatsheet.md`](mysql_procedural_cheatsheet.md) · [`Taller_Repaso_3T_Damaga.sql`](Taller_Repaso_3T_Damaga.sql)
+| Área | Carpeta | Qué hay |
+|------|---------|---------|
+| Fundamentos Java | [`Java/UF_4/`](Java/UF_4/) · [`Java/SentenciasRep/`](Java/SentenciasRep/) · [`Java/Pruebas_UF4_1/`](Java/Pruebas_UF4_1/) | Condicionales, `switch`, bucles `for`/`while` |
+| POO y colecciones | [`Java/POO/`](Java/POO/) | Clases, herencia, arrays, `HashMap`, excepciones, actividades sueltas |
+| Arquitectura y consola avanzada | [`Java/ActividadUF8_2_*/`](Java/) · [`Java/Ejercicio2_ExT2_2425/`](Java/Ejercicio2_ExT2_2425/) | Menús de consola, composición, herencia aplicada |
+| Interfaces gráficas (Swing) | [`Java/POO/src/com/dam/IG/`](Java/POO/src/com/dam/IG/) · [`ExamenT3/`](ExamenT3/) · [`recuperacionT3/`](recuperacionT3/) | MVC, paneles, tablas, JDBC + SQLite |
+| Bases de datos | Scripts en raíz + DDL dentro de proyectos Java | SQL, procedimientos MySQL, SQLite embebida |
+| PHP | [`ActividadPHP_DavidMartinezGallego/`](ActividadPHP_DavidMartinezGallego/) | CRUD web de productos con MySQL |
+| Apuntes | Varios `.md` y [`Java/Apuntes/`](Java/Apuntes/) | Patrones reutilizables, cheatsheets, guías |
 
 ---
 
-## Proyectos principales
+## Proyectos destacados
 
-Estos son los ejercicios más completos, con guías propias:
+Los más completos y con más código propio:
 
-| Proyecto | Descripción | Documentación |
-|----------|-------------|---------------|
-| **ExamenProgAEv3_2526** | CRUD de empresas (Swing + MVC + SQLite). Proyecto de referencia actual. | [README](recuperacionT3/ExamenProgAEv3_2526/README.md) · [TEORIA.md](recuperacionT3/ExamenProgAEv3_2526/TEORIA.md) |
-| **Guía Michelin** | CRUD de restaurantes con `JComboBox`, filtros y tabla. | [ExamenT3/README.md](ExamenT3/README.md) |
-| **PruebaParcial AE1** | Ejercicios de consola (restaurante, opciones). | [`PruebaParcialAE1DavidMartinez/`](PruebaParcialAE1DavidMartinez/) |
-| **Encuestas (IG)** | Aplicación MVC + Swing (prueba parcial T3). | [`Java/POO/src/com/dam/IG/`](Java/POO/src/com/dam/IG/) |
+### ExamenProgAEv3_2526 — Gestión de empresas
 
-### Estructura típica de un examen Swing
+**Ruta:** [`recuperacionT3/ExamenProgAEv3_2526/`](recuperacionT3/ExamenProgAEv3_2526/)
 
-```
-src/
-├── InicioXxx.java              ← main: crea vistas, controlador y conecta listeners
-└── com/dam/
-    ├── control/                ← ActionListener, coordina todo
-    ├── view/                   ← JFrame, JPanel, JTable, formularios
-    └── model/
-        ├── datos/              ← Entidad (POJO) + Textos.java
-        └── db/                 ← AccesoDB, XxxContracts, XxxDAO
+Aplicación Swing para dar de alta, consultar, modificar y eliminar empresas. Arquitectura MVC con DAO, SQLite y validaciones de CIF, correo y teléfono.
 
-DB/ o BBDD/
-├── ConfiguracionDB.properties
-├── ENTIDAD.ddl
-└── BBDD.db                     ← SQLite (crear con el DDL)
+- **Entrada:** `InicioEmpresas`
+- **Stack:** Java 21, Swing, JDBC, SQLite
+- **Docs:** [README del proyecto](recuperacionT3/ExamenProgAEv3_2526/README.md) · [TEORIA.md](recuperacionT3/ExamenProgAEv3_2526/TEORIA.md)
 
-lib/
-└── sqlite-jdbc-3.51.3.0.jar
-```
+---
 
-### Orden recomendado para resolver un examen con TODOs
+### Guía Michelin — Restaurantes
 
-```
-1. Entidad (POJO) + validaciones
-2. Contracts (nombres de tabla y columnas)
-3. AccesoDB (conexión JDBC)
-4. DAO (insert, buscar, obtenerPorId, update, delete)
-5. VPEntidad (JFrame + menú)
-6. Paneles (registro, consulta con tabla, modificación)
-7. Controlador (actionPerformed + métodos privados)
-8. Main (SwingUtilities.invokeLater + ensamblaje)
-```
+**Ruta:** [`ExamenT3/ActividadUF10_2_Guia_Michelin/`](ExamenT3/ActividadUF10_2_Guia_Michelin/)
+
+CRUD de restaurantes de la guía Michelin: consulta con filtros por región y distinción, registro, modificación y eliminación desde tabla.
+
+- **Entrada:** `com.michelin.main.RestaurantesMain`
+- **Stack:** Swing, MVC, SQLite
+- **Docs:** [Guía del bloque ExamenT3](ExamenT3/README.md)
+
+Variante propia en [`ExamenT3/Michelin/MichelinDamaga/`](ExamenT3/Michelin/MichelinDamaga/).
+
+---
+
+### Encuestas — Consumo de series (IG)
+
+**Ruta:** [`Java/POO/src/com/dam/IG/ExsClase/`](Java/POO/src/com/dam/IG/ExsClase/)
+
+Aplicación Swing con patrón MVC para crear encuestas sobre consumo de series de TV y visualizar estadísticas.
+
+- **Entrada:** `Inicio`
+- **Stack:** Swing, MVC
+- **Docs:** [README del proyecto](Java/POO/src/com/dam/IG/ExsClase/README.md)
+
+Plantilla y apuntes relacionados en [`IG/ApuntesExaIG/`](Java/POO/src/com/dam/IG/ApuntesExaIG/).
+
+---
+
+### GestionNoticias — Noticias por consola
+
+**Ruta:** [`Java/Ejercicio2_ExT2_2425/`](Java/Ejercicio2_ExT2_2425/)
+
+Menú de consola para gestionar noticias con jerarquía de clases (política, deportes, economía). Herencia y polimorfismo aplicados.
+
+- **Entrada:** `com.dam.main.GestionNoticias`
+
+---
+
+### ActividadPHP — CRUD de productos
+
+**Ruta:** [`ActividadPHP_DavidMartinezGallego/`](ActividadPHP_DavidMartinezGallego/)
+
+Aplicación web en PHP con MySQL: listar, crear, editar y eliminar productos, con subida de imágenes.
+
+- **Entrada:** `index.php`
+- **Stack:** PHP, MySQL, HTML
+
+---
+
+## Resto de proyectos Java
+
+### Fundamentos (UF4)
+
+| Carpeta | Descripción | Entrada principal |
+|---------|-------------|-------------------|
+| [`Java/UF_4/UF_4/`](Java/UF_4/UF_4/) | Ejercicios de `if`, `switch` y bucles (`ex06`–`ex12`, etc.) | Varios: `dam.Ejercicio2`, `TestIF`, `Switchcase`… |
+| [`Java/SentenciasRep/`](Java/SentenciasRep/) | Repaso de sentencias de control | `Practica2`, `Practica3`, `Ejercicio4`–`6` |
+| [`Java/Pruebas_UF4_1/`](Java/Pruebas_UF4_1/) | Práctica de bucles `for` y `while` | `forsum50`, `pruebasfor`, `pruebawhile`… |
+| [`Java/testNV/`](Java/testNV/) | Prueba rápida con `ArrayList` | `ArrL` |
+
+### POO — [`Java/POO/`](Java/POO/)
+
+Carpeta grande con muchas actividades sueltas. Las subcarpetas más relevantes:
+
+| Subcarpeta | Descripción | Entrada |
+|------------|-------------|---------|
+| [`pojo/`](Java/POO/src/com/dam/pojo/) | Clases de dominio: `Persona`, `Coche`, `Helipuerto`, `Piramide`… | `helipuertomain` |
+| [`actividades/`](Java/POO/src/com/dam/actividades/) | Ejercicios varios: strings, arrays, productos, COVID, palíndromos | `Productomain`, `covidexe`, `arraysDamaga`… |
+| [`actividades/herencia/`](Java/POO/src/com/dam/actividades/herencia/) | Herencia con empleados de empresa y jerarquía de noticias | `EmpresaMain`, `NoticiaMain` |
+| [`actividades/playlist/`](Java/POO/src/com/dam/actividades/playlist/) | Playlist de canciones con `ArrayList` y menú por consola | `playlistmain` |
+| [`actividades/Login/`](Java/POO/src/com/dam/actividades/Login/) | Prototipo Swing de login → ventana principal | `LoginIG/src/Main` |
+| [`actividades/dbCode/`](Java/POO/src/com/dam/actividades/dbCode/) | Laboratorio JDBC con Maven y SQLite | `ProyectoMaven/.../App` |
+| [`hashmaps/`](Java/POO/src/com/dam/hashmaps/) | `HashMap`, `TreeMap`, Tetris de puntuaciones, quiz de verbos | `Tetris`, `Ex01Hashmaps` |
+| [`exceptions/`](Java/POO/src/com/dam/exceptions/) | Pruebas con excepciones y estructuras de productos | `exceptionTest00` |
+| [`testparcial/`](Java/POO/src/com/dam/testparcial/) | Ejercicios de pruebas parciales (arrays, consola) | `ex01`, `ARRBI2021A`… |
+| [`tests/`](Java/POO/src/com/dam/tests/) | Básicos de `String`, arrays y listas | `Strings`, `arrays`, `listest` |
+
+### Arquitectura y consola (UF8)
+
+| Carpeta | Descripción | Entrada |
+|---------|-------------|---------|
+| [`Java/ActividadUF8_2_Arquitectura/`](Java/ActividadUF8_2_Arquitectura/) | Construir una casa con habitaciones tipadas (`Hall`, `Cocina`, `Salon`…) | `GestionArq` |
+| [`Java/ActividadUF8_2_Empresa/`](Java/ActividadUF8_2_Empresa/) | Gestión de empresa con empleados de producción y distribución | `GestionEmpresa` |
+
+### Pruebas y borradores
+
+| Carpeta | Descripción | Entrada |
+|---------|-------------|---------|
+| [`PruebaParcialAE1DavidMartinez/`](PruebaParcialAE1DavidMartinez/) | Dos ejercicios de consola: múltiplos y elección de restaurante | `Ejercicio1`, `EleccionRestaurante` |
+| [`Java/Exs/`](Java/Exs/) | Ejercicio suelto (plantilla) | `ejercicio6` |
+| [`Java/ProgramaME/`](Java/ProgramaME/) | Borrador de programa de triángulos | `triangulos` (vacío) |
+
+---
+
+## Material de referencia (no ejecutable)
+
+| Archivo / carpeta | Contenido |
+|-------------------|-----------|
+| [`Java/Apuntes/`](Java/Apuntes/) | Estructuras de clase reutilizables para exámenes de consola |
+| [`mysql_procedural_cheatsheet.md`](mysql_procedural_cheatsheet.md) | Apuntes de procedimientos, funciones y triggers en MySQL |
+| [`Taller_Repaso_3T_Damaga.sql`](Taller_Repaso_3T_Damaga.sql) | Scripts SQL del taller de repaso del tercer trimestre |
+| [`yazi-cheatsheet.md`](yazi-cheatsheet.md) | Atajos del gestor de archivos Yazi |
+
+---
+
+## Tecnologías usadas
+
+| Tecnología | Dónde aparece |
+|------------|---------------|
+| Java SE 21 | Proyectos principales |
+| Swing | Empresas, Michelin, Encuestas, Login |
+| JDBC + SQLite | Empresas, Michelin, dbCode |
+| MySQL | PHP, scripts SQL, cheatsheet procedural |
+| PHP + HTML | Actividad de productos |
+| Maven | `actividades/dbCode/ProyectoMaven` |
+
+---
+
+## Cómo ejecutar un proyecto
+
+Cada carpeta es independiente. En general:
+
+1. Abrir la carpeta del proyecto en Eclipse, IntelliJ o VS Code.
+2. Localizar la clase con `public static void main`.
+3. Ejecutar como Java Application.
+
+Los proyectos con SQLite necesitan el `.jar` del driver en `lib/` y la base de datos creada con el DDL correspondiente. El proyecto de empresas tiene instrucciones concretas en su [README](recuperacionT3/ExamenProgAEv3_2526/README.md#22-cómo-ejecutar-el-proyecto).
 
 ---
 
@@ -119,85 +170,22 @@ lib/
 
 ```
 Code-DAM/
-├── README.md                          ← este archivo
-├── mysql_procedural_cheatsheet.md     ← apuntes MySQL procedural
-├── Taller_Repaso_3T_Damaga.sql        ← scripts SQL de repaso
+├── Java/                          ← ejercicios y actividades por UF
+│   ├── UF_4/                      ← fundamentos
+│   ├── POO/                       ← POO, colecciones, IG, actividades
+│   ├── ActividadUF8_2_*/          ← arquitectura y empresa (consola)
+│   ├── Ejercicio2_ExT2_2425/      ← gestión de noticias
+│   └── Apuntes/                   ← patrones de consola
 │
-├── Java/                              ← ejercicios por unidad formativa
-│   ├── UF_4/                          ← fundamentos (if, switch, bucles)
-│   ├── SentenciasRep/                 ← repaso de sentencias
-│   ├── Pruebas_UF4_1/                 ← bucles for/while
-│   ├── POO/                           ← POO, colecciones, herencia, hashmaps
-│   ├── ActividadUF8_2_Arquitectura/   ← arquitectura en capas
-│   └── ActividadUF8_2_Empresa/        ← actividad empresa
+├── ExamenT3/                      ← guía Michelin + implementaciones
+├── recuperacionT3/                ← examen de empresas
+├── PruebaParcialAE1DavidMartinez/ ← prueba parcial AE1
+├── ActividadPHP_DavidMartinezGallego/
 │
-├── ExamenT3/                          ← guía Michelin + plantillas T3
-│   ├── README.md
-│   ├── ActividadUF10_2_Guia_Michelin/
-│   └── Michelin/
-│
-├── recuperacionT3/
-│   └── ExamenProgAEv3_2526/           ← examen empresas (proyecto estrella)
-│       ├── README.md                  ← guía práctica con código
-│       └── TEORIA.md                  ← conceptos MVC, DAO, JDBC, Swing
-│
-├── PruebaParcialAE1DavidMartinez/     ← prueba parcial AE1
-└── ActividadPHP_DavidMartinezGallego/ ← actividad PHP (otra asignatura)
+├── mysql_procedural_cheatsheet.md
+├── Taller_Repaso_3T_Damaga.sql
+└── README.md
 ```
-
----
-
-## Cómo ejecutar un proyecto Swing + SQLite
-
-Requisitos: **Java 21**, driver SQLite en `lib/`, base de datos creada con el DDL.
-
-```bash
-cd recuperacionT3/ExamenProgAEv3_2526
-
-# Crear la BD (solo la primera vez)
-mkdir -p BBDD
-sqlite3 BBDD/BBDD.db < DB/EMPRESAS.ddl
-
-# Compilar (--release 21 si el javac del sistema es más nuevo que el JRE del IDE)
-javac --release 21 -cp "lib/sqlite-jdbc-3.51.3.0.jar" -d bin $(find src -name "*.java")
-
-# Ejecutar (desde la raíz del proyecto, donde están DB/ y BBDD/)
-java -cp "bin:lib/sqlite-jdbc-3.51.3.0.jar" InicioEmpresas
-```
-
-En **Eclipse** o **Cursor/VS Code**: clic derecho sobre la clase `main` → Run. El directorio de trabajo debe ser la raíz del proyecto.
-
----
-
-## Cheatsheets y apuntes
-
-| Archivo | Contenido |
-|---------|-----------|
-| [recuperacionT3/.../TEORIA.md](recuperacionT3/ExamenProgAEv3_2526/TEORIA.md) | Teoría MVC, DAO, JDBC, Swing, flujos CRUD |
-| [recuperacionT3/.../README.md](recuperacionT3/ExamenProgAEv3_2526/README.md) | Guía práctica archivo por archivo con código |
-| [ExamenT3/README.md](ExamenT3/README.md) | Plantilla Michelin paso a paso |
-| [mysql_procedural_cheatsheet.md](mysql_procedural_cheatsheet.md) | Procedimientos, funciones y triggers MySQL |
-| [Java/POO/.../CHEATSHEET_EXAMEN.md](Java/POO/src/com/dam/IG/ExsClase/CHEATSHEET_EXAMEN.md) | Resumen MVC + Swing para examen |
-
----
-
-## Tecnologías
-
-| Tecnología | Uso en el repo |
-|------------|----------------|
-| Java SE 21 | Lenguaje principal |
-| Swing | Interfaces gráficas de escritorio |
-| JDBC + SQLite | Persistencia en exámenes y actividades |
-| MySQL | Scripts y apuntes de BD |
-| PHP | Actividad puntual en otra asignatura |
-
----
-
-## Resumen
-
-Este repositorio no es un único proyecto: es un **cuaderno de código** que refleja la progresión del DAM en Java — de `System.out.println` y bucles a aplicaciones completas con ventanas, tablas, menús y base de datos. El hilo conductor del tercer trimestre es dominar **quién hace qué** en MVC y **cómo fluyen los datos** cuando el usuario pulsa cada botón.
-
-> *¿A qué capa pertenece este TODO? ¿Quién necesita el resultado? ¿Tengo el getter para que el controlador lea ese dato?*
 
 ---
 
