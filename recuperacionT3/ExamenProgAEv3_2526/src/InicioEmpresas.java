@@ -19,7 +19,7 @@ public class InicioEmpresas {
 			ce.setPce(pce); // Panel Consulta
 			ce.setPme(pme); // Panel Modificar
 
-			vp.setControlador(ce);
+			vp.setControlador(ce); // Ventana Principal
 			pre.setControlador(ce); // Panel Registrar
 			pce.setControlador(ce); // Panel Consulta
 			pme.setControlador(ce); // Panel Modificar
